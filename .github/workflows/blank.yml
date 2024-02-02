@@ -41,9 +41,9 @@ jobs:
     - name: Build Docker Image
       run: docker build -t asia-south1-docker.pkg.dev/confixa-rnd/confixa-docker-images/abc:$GITHUB_REF_NAME-$GITHUB_SHA .
 
-    # - uses: actions/checkout@v2
-    # - name: Set env
-    #   run: echo "GITHUB_BRANCH=$(echo $GITHUB_REF_NAME-$GITHUB_SHA)" >> $GITHUB_ENV
+    - uses: actions/checkout@v2
+    - name: Set env
+      run: echo "GITHUB_BRANCH=$(echo $GITHUB_REF_NAME-$GITHUB_SHA)" >> $GITHUB_ENV
 
     - name: Push Docker Image to Artifact Registry
       run: |-
