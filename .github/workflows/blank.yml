@@ -1,0 +1,49 @@
+name: gcp-dev
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  gcp-dev:
+    name: Build and Push to GCP
+    runs-on: ubuntu-latest
+
+    permissions:
+        id-token: write
+        contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+    - run: |
+        npm ci
+        npm install
+        npm run build --if-present
+    
+    # Authenticate to Google Cloud using workload identity federation
+    - id: "auth"
+      name: "Obtain access token by using workload identity federation"
+      uses: "google-github-actions/auth@v1"
+
+      with:
+          # create_credentials_file: true
+          # token_format: access_token
+          workload_identity_provider: projects/796292922550/locations/global/workloadIdentityPools/confixa-github-actions/providers/confixa-github-actions
+          service_account: github-action@confixa-rnd.iam.gserviceaccount.com
+
+    - name: Connect to Artifact Registry
+      run: |-
+          # echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://asia-south1-docker.pkg.dev
+          gcloud auth configure-docker asia-south1-docker.pkg.dev
+
+    - name: Build Docker Image
+      run: | 
+        docker build -t asia-south1-docker.pkg.dev/confixa-rnd/confixa-docker-images/abc:latest .
+        docker push asia-south1-docker.pkg.dev/confixa-rnd/confixa-docker-images/abc:latest
