@@ -20,7 +20,7 @@ jobs:
     # Authenticate to Google Cloud using workload identity federation
     - id: "auth"
       name: "Obtain access token by using workload identity federation"
-      uses: "google-github-actions/auth@v0"
+      uses: "google-github-actions/auth@v1"
 
       with:
           create_credentials_file: true
