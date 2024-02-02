@@ -34,7 +34,7 @@ jobs:
 
       with:
           # create_credentials_file: true
-          # token_format: access_token 
+          token_format: access_token 
           workload_identity_provider: projects/796292922550/locations/global/workloadIdentityPools/confixa-github-actions/providers/confixa-github-actions
           service_account: github-action@confixa-rnd.iam.gserviceaccount.com
 
