@@ -35,6 +35,7 @@ jobs:
                   
     - name: Connect to Artifact Registry
       run: |-
+          gcloud auth login
           gcloud auth configure-docker asia-south1-docker.pkg.dev
           # echo ${{ steps.auth.outputs.access_token }} | docker login -u oauth2accesstoken --password-stdin https://asia-south1-docker.pkg.dev
 
